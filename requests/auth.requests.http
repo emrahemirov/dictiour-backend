@@ -1,0 +1,6 @@
+POST http://localhost:3000/auth/sign-up
+content-type: application/json
+
+{
+  "accountAddress":"0xB5F8b63ncADfdff7bc217D946cB775a368582975"
+}

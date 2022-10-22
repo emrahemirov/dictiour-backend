@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@auth/auth.module';
-import { TypeOrmExModule } from '@database/typeorm-ex.module';
-import { UserRepository } from '@user/repositories/user.repository';
+import { User } from '@user/entities/user.entity';
 
 @Module({
   imports: [
@@ -13,10 +12,9 @@ import { UserRepository } from '@user/repositories/user.repository';
       username: 'postgres',
       password: 'postgres',
       database: 'dictiour',
-      autoLoadEntities: true,
+      entities: [User],
       synchronize: true
     }),
-    TypeOrmExModule.forCustomRepository([UserRepository]),
     AuthModule
   ]
 })
