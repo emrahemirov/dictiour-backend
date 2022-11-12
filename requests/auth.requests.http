@@ -2,5 +2,15 @@ POST http://localhost:3000/auth/sign-up
 content-type: application/json
 
 {
-  "accountAddress":"0xB5F8b63ncADfdff7bc217D946cB775a368582975"
+  "username":"username",
+  "password":"pass",
+  "passwordConfirm":"pass"
+}
+###
+POST http://localhost:3000/auth/sign-in
+content-type: application/json
+
+{
+  "username":"username",
+  "password":"pass"
 }
