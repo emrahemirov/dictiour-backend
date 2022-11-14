@@ -4,6 +4,10 @@ import { AuthModule } from '@auth/auth.module';
 import { User } from 'shared/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { DictionaryModule } from './dictionary/dictionary.module';
+import { Word } from 'shared/entities/word.entity';
+import { UserMeaning } from 'shared/entities/user-meaning.entity';
+import { UserExample } from 'shared/entities/user-example.entity';
 
 @Module({
   imports: [
@@ -14,7 +18,7 @@ import { UserModule } from './user/user.module';
       username: 'postgres',
       password: 'postgres',
       database: 'dictiour',
-      entities: [User],
+      entities: [User, Word, UserMeaning, UserExample],
       synchronize: true
     }),
     AuthModule,
@@ -22,7 +26,8 @@ import { UserModule } from './user/user.module';
       isGlobal: true,
       envFilePath: '.env'
     }),
-    UserModule
+    UserModule,
+    DictionaryModule
   ]
 })
 export class AppModule {}
