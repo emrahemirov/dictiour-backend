@@ -3,11 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@auth/auth.module';
 import { User } from 'shared/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
-import { DictionaryModule } from './dictionary/dictionary.module';
-import { Word } from 'shared/entities/word.entity';
+import { GlobalWord } from 'shared/entities/global-word.entity';
 import { UserMeaning } from 'shared/entities/user-meaning.entity';
 import { UserExample } from 'shared/entities/user-example.entity';
+import { UserDictionaryModule } from './user/user.module';
+import { UserWord } from 'shared/entities/user-word.entity';
+import { GlobalWordModule } from './global-word/global-word.module';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { UserExample } from 'shared/entities/user-example.entity';
       username: 'postgres',
       password: 'postgres',
       database: 'dictiour',
-      entities: [User, Word, UserMeaning, UserExample],
+      entities: [User, GlobalWord, UserWord, UserMeaning, UserExample],
       synchronize: true
     }),
     AuthModule,
@@ -26,8 +27,8 @@ import { UserExample } from 'shared/entities/user-example.entity';
       isGlobal: true,
       envFilePath: '.env'
     }),
-    UserModule,
-    DictionaryModule
+    UserDictionaryModule,
+    GlobalWordModule
   ]
 })
 export class AppModule {}

@@ -5,9 +5,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
+import { GlobalWord } from './global-word.entity';
+import { UserMeaning } from './user-meaning.entity';
 import { User } from './user.entity';
 
-@Entity({ name: 'user_examples' })
+@Entity({ name: 'user_example' })
 export class UserExample {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -16,9 +18,11 @@ export class UserExample {
   @JoinColumn({ name: 'user-id' })
   user: User;
 
-  @Column({ name: 'meaning-id' })
-  meaningId: string;
+  @ManyToOne(() => UserMeaning, (userMeaning) => userMeaning.userExamples)
+  @JoinColumn({ name: 'meaning-id' })
+  meaningWord: UserMeaning;
 
-  @Column({ name: 'example-word-id' })
-  exampleWordId: string;
+  @ManyToOne(() => GlobalWord, (globalWord) => globalWord.examples)
+  @JoinColumn({ name: 'example-word-id' })
+  exampleWord: GlobalWord;
 }

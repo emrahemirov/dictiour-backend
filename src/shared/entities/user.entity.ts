@@ -10,7 +10,7 @@ import { UserMeaning } from './user-meaning.entity';
 import { UserWord } from './user-word.entity';
 import * as bcrypt from 'bcrypt';
 
-@Entity({ name: 'users' })
+@Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -20,6 +20,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column()
+  role: string;
 
   @OneToMany(() => UserWord, (userWord) => userWord.user)
   userWords: UserWord[];
