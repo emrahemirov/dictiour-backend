@@ -7,6 +7,7 @@ import { GlobalWord } from 'shared/entities';
 @Module({
   imports: [TypeOrmModule.forFeature([GlobalWord])],
   providers: [GlobalWordService],
-  controllers: [GlobalWordController]
+  controllers: [GlobalWordController],
+  exports: [GlobalWordService]
 })
 export class GlobalWordModule {}

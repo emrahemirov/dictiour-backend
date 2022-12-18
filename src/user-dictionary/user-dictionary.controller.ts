@@ -23,10 +23,9 @@ export class UserDictionaryController {
   @Post('/words')
   async addUserWord(
     @GetCurrentUser() currentUser: User,
-    @Body() { word }: AddUserWordDto,
-    @Res() res: Response
-  ): Promise<void> {
-    // res.status(HttpStatus.CREATED).json(userWord);
+    @Body() body: AddUserWordDto
+  ) {
+    return this.userDictionaryService.getOrCreateUserWord(body, currentUser);
   }
 
   @Delete('/words/:id')
@@ -35,7 +34,7 @@ export class UserDictionaryController {
     @Param() id: string,
     @Res() res: Response
   ): Promise<void> {
-    await this.userDictionaryService.deleteWord(id, currentUser);
+    await this.userDictionaryService.deleteUserWord(id, currentUser);
 
     res.status(HttpStatus.OK);
   }
@@ -43,10 +42,9 @@ export class UserDictionaryController {
   @Post('/meanings')
   async addUserMeaning(
     @GetCurrentUser() currentUser: User,
-    @Body() { fromWord, toWord }: AddUserMeaningDto,
-    @Res() res: Response
-  ): Promise<void> {
-    // res.status(HttpStatus.CREATED).json(userMeaning);
+    @Body() body: AddUserMeaningDto
+  ) {
+    return this.userDictionaryService.getOrCreateUserMeaning(body, currentUser);
   }
 
   @Delete('/meanings/:id')
@@ -55,7 +53,7 @@ export class UserDictionaryController {
     @Param() id: string,
     @Res() res: Response
   ): Promise<void> {
-    await this.userDictionaryService.deleteMeaning(id, currentUser);
+    await this.userDictionaryService.deleteUserMeaning(id, currentUser);
 
     res.status(HttpStatus.OK);
   }
@@ -63,10 +61,9 @@ export class UserDictionaryController {
   @Post('/examples')
   async addUserExample(
     @GetCurrentUser() currentUser: User,
-    @Body() { meaning, example }: AddUserExampleDto,
-    @Res() res: Response
-  ): Promise<void> {
-    // res.status(HttpStatus.CREATED).json(userExample);
+    @Body() body: AddUserExampleDto
+  ) {
+    // return this.userDictionaryService.getOrCreateUserExample(body, currentUser);
   }
 
   @Delete('/examples/:id')
@@ -75,7 +72,7 @@ export class UserDictionaryController {
     @Param() id: string,
     @Res() res: Response
   ): Promise<void> {
-    await this.userDictionaryService.deleteExample(id, currentUser);
+    await this.userDictionaryService.deleteUserExample(id, currentUser);
 
     res.status(HttpStatus.OK);
   }

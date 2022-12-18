@@ -7,7 +7,13 @@ export class AddUserExampleDto {
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => WordDto)
-  meaning: WordDto;
+  fromWord: WordDto;
+
+  @IsObject()
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => WordDto)
+  toWord: WordDto;
 
   @IsObject()
   @IsNotEmptyObject()

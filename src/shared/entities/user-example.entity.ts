@@ -14,15 +14,21 @@ export class UserExample {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User, (user) => user.userExamples)
-  @JoinColumn({ name: 'user-id' })
+  @ManyToOne(() => User, (user) => user.userExamples, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => UserMeaning, (userMeaning) => userMeaning.userExamples)
-  @JoinColumn({ name: 'meaning-id' })
+  @ManyToOne(() => UserMeaning, (userMeaning) => userMeaning.userExamples, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'meaning_id' })
   meaningWord: UserMeaning;
 
-  @ManyToOne(() => GlobalWord, (globalWord) => globalWord.examples)
-  @JoinColumn({ name: 'example-word-id' })
+  @ManyToOne(() => GlobalWord, (globalWord) => globalWord.examples, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'example_word_id' })
   exampleWord: GlobalWord;
 }

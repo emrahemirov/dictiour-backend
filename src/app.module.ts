@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GlobalWord } from 'shared/entities/global-word.entity';
 import { UserMeaning } from 'shared/entities/user-meaning.entity';
 import { UserExample } from 'shared/entities/user-example.entity';
-import { UserDictionaryModule } from './user/user.module';
+import { UserDictionaryModule } from './user-dictionary/user-dictionary.module';
 import { UserWord } from 'shared/entities/user-word.entity';
 import { GlobalWordModule } from './global-word/global-word.module';
 

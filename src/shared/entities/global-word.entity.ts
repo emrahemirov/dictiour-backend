@@ -17,9 +17,6 @@ export class GlobalWord {
   @OneToMany(() => UserWord, (userWord) => userWord.word)
   userWords: UserWord[];
 
-  @OneToMany(() => UserMeaning, (userMeaning) => userMeaning.fromWord)
-  meaningFromWords: UserMeaning[];
-
   @OneToMany(() => UserMeaning, (userMeaning) => userMeaning.toWord)
   meaningToWords: UserMeaning[];
 

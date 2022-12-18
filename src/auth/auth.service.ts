@@ -36,7 +36,7 @@ export class AuthService {
     }
   }
 
-  async signIn(signInDto: SignInDto): Promise<{ accessToken: string }> {
+  async signIn(signInDto: SignInDto): Promise<any> {
     const { username, password } = signInDto;
 
     const user = await this.userRepository.findOne({ where: { username } });
@@ -48,6 +48,6 @@ export class AuthService {
 
     const payload: JwtPayload = { username };
     const accessToken: string = this.jwtService.sign(payload);
-    return { accessToken };
+    return { accessToken, username: user.username, role: user.role };
   }
 }
