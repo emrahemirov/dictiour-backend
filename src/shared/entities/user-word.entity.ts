@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -10,7 +11,7 @@ import { GlobalWord } from './global-word.entity';
 import { UserMeaning } from './user-meaning.entity';
 
 @Entity({ name: 'user_word' })
-export class UserWord {
+export class UserWord extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -26,6 +27,8 @@ export class UserWord {
   @JoinColumn({ name: 'word_id' })
   word: GlobalWord;
 
-  @OneToMany(() => UserMeaning, (userMeaning) => userMeaning.fromWord)
+  @OneToMany(() => UserMeaning, (userMeaning) => userMeaning.fromWord, {
+    eager: true
+  })
   meaningFromWords: UserMeaning[];
 }

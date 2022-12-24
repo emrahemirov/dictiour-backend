@@ -63,7 +63,7 @@ export class UserDictionaryController {
     @GetCurrentUser() currentUser: User,
     @Body() body: AddUserExampleDto
   ) {
-    // return this.userDictionaryService.getOrCreateUserExample(body, currentUser);
+    return this.userDictionaryService.getOrCreateUserExample(body, currentUser);
   }
 
   @Delete('/examples/:id')

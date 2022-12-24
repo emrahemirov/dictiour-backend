@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   BeforeInsert,
   Column,
   Entity,
@@ -11,7 +12,7 @@ import { UserWord } from './user-word.entity';
 import * as bcrypt from 'bcrypt';
 
 @Entity({ name: 'user' })
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

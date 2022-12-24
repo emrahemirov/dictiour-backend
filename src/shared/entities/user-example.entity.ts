@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinColumn,
@@ -10,7 +11,7 @@ import { UserMeaning } from './user-meaning.entity';
 import { User } from './user.entity';
 
 @Entity({ name: 'user_example' })
-export class UserExample {
+export class UserExample extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

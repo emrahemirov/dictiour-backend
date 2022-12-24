@@ -22,19 +22,22 @@ export class UserDictionaryService {
   ) {}
 
   async getOrCreateUserWord({ word }: AddUserWordDto, currentUser: User) {
-    const globalWord = await this.globalWordService.getOrCreate(word);
+    const globalWord = await this.globalWordService.getOrCreate(
+      word,
+      'asUserWord'
+    );
 
     const foundUserWord = await this.userWordRepository.findOne({
-      where: { user: currentUser, word: globalWord }
+      where: { user: { id: currentUser.id }, word: { id: globalWord.id } }
     });
     if (foundUserWord) return foundUserWord;
 
-    const userWordEntity = this.userWordRepository.create({
-      word: globalWord,
-      user: currentUser
-    });
-
-    const createdUserWord = await this.userWordRepository.save(userWordEntity);
+    const createdUserWord = await this.userWordRepository
+      .create({
+        word: globalWord,
+        user: currentUser
+      })
+      .save();
 
     return createdUserWord;
   }
@@ -43,33 +46,34 @@ export class UserDictionaryService {
     { fromWord, toWord }: AddUserMeaningDto,
     currentUser: User
   ) {
+    if (fromWord.text === toWord.text && fromWord.language === toWord.language)
+      throw new BadRequestException('meaning_words_are_same');
+
     const userWord = await this.getOrCreateUserWord(
       { word: fromWord },
       currentUser
     );
-    const globalToWord = await this.globalWordService.getOrCreate(toWord);
-
-    if (userWord.word.id === globalToWord.id)
-      throw new BadRequestException('meaning_words_are_same');
+    const globalToWord = await this.globalWordService.getOrCreate(
+      toWord,
+      'asUserMeaning'
+    );
 
     const foundUserMeaning = await this.userMeaningRepository.findOne({
       where: {
-        user: currentUser,
-        fromWord: userWord,
-        toWord: globalToWord
+        user: { id: currentUser.id },
+        fromWord: { id: userWord.id },
+        toWord: { id: globalToWord.id }
       }
     });
-
     if (foundUserMeaning) return foundUserMeaning;
 
-    const userMeaningEntity = this.userMeaningRepository.create({
-      fromWord: userWord,
-      toWord: globalToWord,
-      user: currentUser
-    });
-    const createdUserMeaning = await this.userMeaningRepository.save(
-      userMeaningEntity
-    );
+    const createdUserMeaning = await this.userMeaningRepository
+      .create({
+        fromWord: userWord,
+        toWord: globalToWord,
+        user: currentUser
+      })
+      .save();
 
     return createdUserMeaning;
   }
@@ -78,64 +82,77 @@ export class UserDictionaryService {
     { example, fromWord, toWord }: AddUserExampleDto,
     currentUser: User
   ) {
-    const globalExampleWord = await this.globalWordService.getOrCreate(example);
+    if (
+      [fromWord.text, toWord.text].includes(example.text) &&
+      [fromWord.language, toWord.language].includes(example.language)
+    )
+      throw new BadRequestException('example_words_are_same');
+
     const userMeaningWord = await this.getOrCreateUserMeaning(
       { fromWord, toWord },
       currentUser
     );
-
-    if (
-      [userMeaningWord.fromWord.id, userMeaningWord.toWord.id].includes(
-        globalExampleWord.id
-      )
-    )
-      throw new BadRequestException('words_are_same');
+    const globalExampleWord = await this.globalWordService.getOrCreate(
+      example,
+      'asUserExample'
+    );
 
     const foundUserExample = await this.userExampleRepository.findOne({
       where: {
-        user: currentUser,
-        meaningWord: userMeaningWord,
-        exampleWord: globalExampleWord
+        user: { id: currentUser.id },
+        meaningWord: { id: userMeaningWord.id },
+        exampleWord: { id: globalExampleWord.id }
       }
     });
     if (foundUserExample) return foundUserExample;
 
-    const userExampleEntity = this.userExampleRepository.create({
-      meaningWord: userMeaningWord,
-      exampleWord: globalExampleWord,
-      user: currentUser
-    });
-    const createdUserExample = await this.userExampleRepository.save(
-      userExampleEntity
-    );
+    const createdUserExample = await this.userExampleRepository
+      .create({
+        meaningWord: userMeaningWord,
+        exampleWord: globalExampleWord,
+        user: currentUser
+      })
+      .save();
 
     return createdUserExample;
   }
 
   async deleteUserWord(id: string, currentUser: User) {
-    const { affected } = await this.userWordRepository.delete({
-      id: id,
-      user: currentUser
+    const foundUserWord = await this.userWordRepository.findOne({
+      where: { id, user: { id: currentUser.id } }
     });
 
-    if (affected === 0) throw new NotFoundException();
+    if (!foundUserWord) throw new NotFoundException();
+
+    this.globalWordService.decreaseStatistics(
+      foundUserWord.word.id,
+      'asUserWord'
+    );
   }
 
   async deleteUserMeaning(id: string, currentUser: User) {
-    const { affected } = await this.userMeaningRepository.delete({
-      id: id,
-      user: currentUser
+    const foundUserMeaning = await this.userMeaningRepository.findOne({
+      where: { id, user: { id: currentUser.id } }
     });
 
-    if (affected === 0) throw new NotFoundException();
+    if (!foundUserMeaning) throw new NotFoundException();
+
+    this.globalWordService.decreaseStatistics(
+      foundUserMeaning.toWord.id,
+      'asUserMeaning'
+    );
   }
 
   async deleteUserExample(id: string, currentUser: User) {
-    const { affected } = await this.userExampleRepository.delete({
-      id: id,
-      user: currentUser
+    const foundUserExample = await this.userExampleRepository.findOne({
+      where: { id, user: { id: currentUser.id } }
     });
 
-    if (affected === 0) throw new NotFoundException();
+    if (!foundUserExample) throw new NotFoundException();
+
+    this.globalWordService.decreaseStatistics(
+      foundUserExample.exampleWord.id,
+      'asUserExample'
+    );
   }
 }
