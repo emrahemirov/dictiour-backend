@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Match } from 'shared/decorators/match.decorator';
+import { Match } from 'shared/decorators';
 
 export class SignUpDto {
   @IsNotEmpty()

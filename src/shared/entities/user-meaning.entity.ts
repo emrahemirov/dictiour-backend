@@ -35,8 +35,6 @@ export class UserMeaning extends BaseEntity {
   @JoinColumn({ name: 'to_word_id' })
   toWord: GlobalWord;
 
-  @OneToMany(() => UserExample, (userExample) => userExample.meaningWord, {
-    eager: true
-  })
+  @OneToMany(() => UserExample, (userExample) => userExample.meaningWord)
   userExamples: UserExample[];
 }

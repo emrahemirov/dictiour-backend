@@ -1,3 +1,4 @@
+import { Languages } from 'shared/enums';
 import {
   BaseEntity,
   Column,
@@ -18,7 +19,7 @@ export class GlobalWord extends BaseEntity {
   text: string;
 
   @Column()
-  language: string;
+  language: Languages;
 
   @Column({ name: 'as_user_word', default: 0 })
   asUserWord: number;
@@ -29,16 +30,12 @@ export class GlobalWord extends BaseEntity {
   @Column({ name: 'as_user_example', default: 0 })
   asUserExample: number;
 
-  @OneToMany(() => UserWord, (userWord) => userWord.word, { eager: true })
+  @OneToMany(() => UserWord, (userWord) => userWord.word)
   userWords: UserWord[];
 
-  @OneToMany(() => UserMeaning, (userMeaning) => userMeaning.toWord, {
-    eager: true
-  })
+  @OneToMany(() => UserMeaning, (userMeaning) => userMeaning.toWord)
   meaningToWords: UserMeaning[];
 
-  @OneToMany(() => UserExample, (userExample) => userExample.exampleWord, {
-    eager: true
-  })
+  @OneToMany(() => UserExample, (userExample) => userExample.exampleWord)
   examples: UserExample[];
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GlobalWord } from 'shared/entities';
 import { Repository } from 'typeorm';
-import { CreateGlobalWord } from './dtos/create-global-word.dto';
+import { WordDto } from 'shared/dtos';
 
 @Injectable()
 export class GlobalWordService {
@@ -12,7 +12,7 @@ export class GlobalWordService {
   ) {}
 
   async getOrCreate(
-    word: CreateGlobalWord,
+    word: WordDto,
     as: 'asUserWord' | 'asUserMeaning' | 'asUserExample'
   ): Promise<GlobalWord> {
     let foundGlobalWord = await this.globalWordRepository.findOne({
