@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserExample, UserMeaning, UserWord } from 'shared/entities';
-import { AddUserWordDto } from '../../shared/dtos';
+import { User, UserWord } from 'shared/entities';
+import { AddUserWordDto, SearchParamsDto } from '../../shared/dtos';
 import { GlobalWordService } from 'global-word/global-word.service';
 
 @Injectable()
@@ -12,6 +12,34 @@ export class UserWordService {
     private userWordRepository: Repository<UserWord>,
     private globalWordService: GlobalWordService
   ) {}
+
+  async getUserWords(
+    { language, page, search }: SearchParamsDto,
+    currentUser: User
+  ) {
+    const query = this.userWordRepository
+      .createQueryBuilder('user_word')
+      .where('user_word.user.id = :id', {
+        id: currentUser.id
+      });
+
+    if (language)
+      query.andWhere('LOWER(user_word.word.language) = LOWER(:language)', {
+        language
+      });
+
+    if (search)
+      query.andWhere(`(LOWER(user_word.word.text) LIKE LOWER(:search)`, {
+        search: `%${search}%`
+      });
+
+    const userWords = await query
+      .offset((page - 1) * 30)
+      .limit(30)
+      .getMany();
+
+    return userWords;
+  }
 
   async getOrCreateUserWord({ word }: AddUserWordDto, currentUser: User) {
     const globalWord = await this.globalWordService.getOrCreate(
