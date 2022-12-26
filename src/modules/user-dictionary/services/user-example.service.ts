@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserExample } from 'shared/entities';
+import { User, UserExample } from 'entities';
 import { AddUserExampleDto, SearchParamsDto } from '../../shared/dtos';
-import { GlobalWordService } from 'global-word/global-word.service';
+import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { UserMeaningService } from './user-meaning.service';
 
 @Injectable()

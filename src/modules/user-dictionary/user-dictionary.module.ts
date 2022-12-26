@@ -1,8 +1,8 @@
-import { AuthModule } from '@auth/auth.module';
+import { AuthModule } from 'modules/auth/auth.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GlobalWordModule } from 'global-word/global-word.module';
-import { UserWord, UserExample, UserMeaning } from 'shared/entities';
+import { GlobalWordModule } from 'modules/global-word/global-word.module';
+import { UserWord, UserExample, UserMeaning } from 'entities';
 import {
   UserExampleController,
   UserMeaningController,

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GlobalWord } from 'shared/entities';
+import { GlobalWord } from 'entities';
 import { Repository } from 'typeorm';
 import { WordDto } from 'shared/dtos';
 

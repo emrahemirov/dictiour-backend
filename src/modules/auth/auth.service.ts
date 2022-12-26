@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'shared/entities/user.entity';
-import { JwtPayload } from '../shared/interfaces/jwt-payload.interface';
+import { User } from 'entities/user.entity';
+import { JwtPayload } from '../../shared/interfaces/jwt-payload.interface';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { SignInDto, SignUpDto } from 'shared/dtos';

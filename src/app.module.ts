@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '@auth/auth.module';
-import { User } from 'shared/entities/user.entity';
+
+import { User } from 'entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
-import { GlobalWord } from 'shared/entities/global-word.entity';
-import { UserMeaning } from 'shared/entities/user-meaning.entity';
-import { UserExample } from 'shared/entities/user-example.entity';
-import { UserDictionaryModule } from './user-dictionary/user-dictionary.module';
-import { UserWord } from 'shared/entities/user-word.entity';
-import { GlobalWordModule } from './global-word/global-word.module';
+import { GlobalWord } from 'entities/global-word.entity';
+import { UserMeaning } from 'entities/user-meaning.entity';
+import { UserExample } from 'entities/user-example.entity';
+import { UserWord } from 'entities/user-word.entity';
+import {
+  AuthModule,
+  GlobalWordModule,
+  ReportModule,
+  UserDictionaryModule
+} from 'modules';
 
 @Module({
   imports: [
@@ -28,7 +32,8 @@ import { GlobalWordModule } from './global-word/global-word.module';
       envFilePath: '.env'
     }),
     UserDictionaryModule,
-    GlobalWordModule
+    GlobalWordModule,
+    ReportModule
   ]
 })
 export class AppModule {}

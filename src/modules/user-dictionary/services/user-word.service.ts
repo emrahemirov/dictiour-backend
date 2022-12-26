@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserWord } from 'shared/entities';
+import { User, UserWord } from 'entities';
 import { AddUserWordDto, SearchParamsDto } from '../../shared/dtos';
-import { GlobalWordService } from 'global-word/global-word.service';
+import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { BadRequestException } from '@nestjs/common/exceptions';
 
 @Injectable()
