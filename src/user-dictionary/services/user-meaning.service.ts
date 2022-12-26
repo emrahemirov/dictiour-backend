@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserMeaning } from 'shared/entities';
-import { AddUserMeaningDto } from '../../shared/dtos';
+import { User, UserMeaning, UserWord } from 'shared/entities';
+import { AddUserMeaningDto, SearchParamsDto, WordDto } from '../../shared/dtos';
 import { GlobalWordService } from 'global-word/global-word.service';
 import { UserWordService } from './user-word.service';
 
@@ -20,6 +20,27 @@ export class UserMeaningService {
     private globalWordService: GlobalWordService
   ) {}
 
+  async getUserMeanings(
+    { page, userWordId }: SearchParamsDto,
+    currentUser: User
+  ) {
+    const query = this.userMeaningRepository
+      .createQueryBuilder('user_meaning')
+      .where('user_meaning.user_id = :id', {
+        id: currentUser.id
+      })
+      .andWhere('user_meaning.from_word_id = :id', {
+        id: userWordId
+      });
+
+    const userMeanings = await query
+      .offset((page - 1) * 30)
+      .limit(30)
+      .getMany();
+
+    return userMeanings;
+  }
+
   async getOrCreateUserMeaning(
     { fromWord, toWord }: AddUserMeaningDto,
     currentUser: User
@@ -31,10 +52,7 @@ export class UserMeaningService {
       { word: fromWord },
       currentUser
     );
-    const globalToWord = await this.globalWordService.getOrCreate(
-      toWord,
-      'asUserMeaning'
-    );
+    const globalToWord = await this.globalWordService.getOrCreate(toWord);
 
     const foundUserMeaning = await this.userMeaningRepository.findOne({
       where: {
@@ -53,19 +71,38 @@ export class UserMeaningService {
       })
       .save();
 
+    await this.globalWordService.changeStatistics(
+      globalToWord.id,
+      'asUserMeaning',
+      'increase',
+      1
+    );
+
     return createdUserMeaning;
   }
 
   async deleteUserMeaning(id: string, currentUser: User) {
     const foundUserMeaning = await this.userMeaningRepository.findOne({
-      where: { id, user: { id: currentUser.id } }
+      where: { id, user: { id: currentUser.id } },
+      relations: { toWord: true }
     });
 
     if (!foundUserMeaning) throw new NotFoundException();
 
-    this.globalWordService.decreaseStatistics(
-      foundUserMeaning.toWord.id,
-      'asUserMeaning'
-    );
+    try {
+      const { affected } = await this.userMeaningRepository.delete(
+        foundUserMeaning.id
+      );
+      if (!affected) throw new BadRequestException('cannot_delete');
+
+      await this.globalWordService.changeStatistics(
+        foundUserMeaning.toWord.id,
+        'asUserMeaning',
+        'decrease',
+        1
+      );
+    } catch (err) {
+      throw new BadRequestException('cannot_delete');
+    }
   }
 }

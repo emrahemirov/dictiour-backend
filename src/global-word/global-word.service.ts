@@ -11,22 +11,12 @@ export class GlobalWordService {
     private readonly globalWordRepository: Repository<GlobalWord>
   ) {}
 
-  async getOrCreate(
-    word: WordDto,
-    as: 'asUserWord' | 'asUserMeaning' | 'asUserExample'
-  ): Promise<GlobalWord> {
+  async getOrCreate(word: WordDto): Promise<GlobalWord> {
     let foundGlobalWord = await this.globalWordRepository.findOne({
       where: { text: word.text, language: word.language }
     });
 
-    if (foundGlobalWord) {
-      const updatedGlobalWord = await this.globalWordRepository.save({
-        ...foundGlobalWord,
-        [as]: foundGlobalWord[as]++
-      });
-
-      return updatedGlobalWord;
-    }
+    if (foundGlobalWord) return foundGlobalWord;
 
     const createdGlobalWord = await this.globalWordRepository
       .create(word)
@@ -35,15 +25,20 @@ export class GlobalWordService {
     return createdGlobalWord;
   }
 
-  async decreaseStatistics(
+  async changeStatistics(
     id: string,
-    as: 'asUserWord' | 'asUserMeaning' | 'asUserExample'
+    as: 'asUserWord' | 'asUserMeaning' | 'asUserExample',
+    type: 'increase' | 'decrease',
+    count: number
   ) {
     await this.globalWordRepository
       .createQueryBuilder()
       .update(GlobalWord)
       .set({
-        [as]: () => `${as} - 1`
+        [as]: () =>
+          `${as.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)} ${
+            type === 'increase' ? '+' : '-'
+          } ${count}`
       })
       .where('id = :id', { id })
       .execute();

@@ -31,11 +31,11 @@ export class UserWordController {
   @Delete('/:id')
   async deleteUserWord(
     @GetCurrentUser() currentUser: User,
-    @Param() id: string,
+    @Param() param: { id: string },
     @Res() res: Response
   ): Promise<void> {
-    await this.userWordService.deleteUserWord(id, currentUser);
+    await this.userWordService.deleteUserWord(param.id, currentUser);
 
-    res.status(HttpStatus.OK);
+    res.status(HttpStatus.OK).send();
   }
 }

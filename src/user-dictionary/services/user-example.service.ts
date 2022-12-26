@@ -6,7 +6,7 @@ import {
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserExample } from 'shared/entities';
-import { AddUserExampleDto } from '../../shared/dtos';
+import { AddUserExampleDto, SearchParamsDto } from '../../shared/dtos';
 import { GlobalWordService } from 'global-word/global-word.service';
 import { UserMeaningService } from './user-meaning.service';
 
@@ -19,6 +19,27 @@ export class UserExampleService {
     private userMeaningService: UserMeaningService,
     private globalWordService: GlobalWordService
   ) {}
+
+  async getUserExamples(
+    { page, userMeaningId }: SearchParamsDto,
+    currentUser: User
+  ) {
+    const query = this.userExampleRepository
+      .createQueryBuilder('user_example')
+      .where('user_example.user_id = :id', {
+        id: currentUser.id
+      })
+      .andWhere('user_example.meaning_word_id = :id', {
+        id: userMeaningId
+      });
+
+    const userExamples = await query
+      .offset((page - 1) * 30)
+      .limit(30)
+      .getMany();
+
+    return userExamples;
+  }
 
   async getOrCreateUserExample(
     { example, fromWord, toWord }: AddUserExampleDto,
@@ -35,10 +56,7 @@ export class UserExampleService {
         { fromWord, toWord },
         currentUser
       );
-    const globalExampleWord = await this.globalWordService.getOrCreate(
-      example,
-      'asUserExample'
-    );
+    const globalExampleWord = await this.globalWordService.getOrCreate(example);
 
     const foundUserExample = await this.userExampleRepository.findOne({
       where: {
@@ -57,19 +75,38 @@ export class UserExampleService {
       })
       .save();
 
+    await this.globalWordService.changeStatistics(
+      globalExampleWord.id,
+      'asUserExample',
+      'increase',
+      1
+    );
+
     return createdUserExample;
   }
 
   async deleteUserExample(id: string, currentUser: User) {
     const foundUserExample = await this.userExampleRepository.findOne({
-      where: { id, user: { id: currentUser.id } }
+      where: { id, user: { id: currentUser.id } },
+      relations: { exampleWord: true }
     });
 
     if (!foundUserExample) throw new NotFoundException();
 
-    this.globalWordService.decreaseStatistics(
-      foundUserExample.exampleWord.id,
-      'asUserExample'
-    );
+    try {
+      const { affected } = await this.userExampleRepository.delete(
+        foundUserExample.id
+      );
+      if (!affected) throw new BadRequestException('cannot_delete');
+
+      await this.globalWordService.changeStatistics(
+        foundUserExample.exampleWord.id,
+        'asUserExample',
+        'decrease',
+        1
+      );
+    } catch (err) {
+      throw new BadRequestException('cannot_delete');
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 import { Languages } from 'shared/enums';
 
 export class SearchParamsDto {

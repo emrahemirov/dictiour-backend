@@ -16,15 +16,15 @@ export class UserExample extends BaseEntity {
   id: string;
 
   @ManyToOne(() => User, (user) => user.userExamples, {
-    onDelete: 'CASCADE'
+    onDelete: 'RESTRICT'
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ManyToOne(() => UserMeaning, (userMeaning) => userMeaning.userExamples, {
-    onDelete: 'CASCADE'
+    onDelete: 'RESTRICT'
   })
-  @JoinColumn({ name: 'meaning_id' })
+  @JoinColumn({ name: 'meaning_word_id' })
   meaningWord: UserMeaning;
 
   @ManyToOne(() => GlobalWord, (globalWord) => globalWord.examples, {

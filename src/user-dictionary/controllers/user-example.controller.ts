@@ -31,11 +31,11 @@ export class UserExampleController {
   @Delete('/:id')
   async deleteUserExample(
     @GetCurrentUser() currentUser: User,
-    @Param() id: string,
+    @Param() param: { id: string },
     @Res() res: Response
   ): Promise<void> {
-    await this.userExampleService.deleteUserExample(id, currentUser);
+    await this.userExampleService.deleteUserExample(param.id, currentUser);
 
-    res.status(HttpStatus.OK);
+    res.status(HttpStatus.OK).send();
   }
 }

@@ -31,11 +31,11 @@ export class UserMeaningController {
   @Delete('/:id')
   async deleteUserMeaning(
     @GetCurrentUser() currentUser: User,
-    @Param() id: string,
+    @Param() param: { id: string },
     @Res() res: Response
   ): Promise<void> {
-    await this.userMeaningService.deleteUserMeaning(id, currentUser);
+    await this.userMeaningService.deleteUserMeaning(param.id, currentUser);
 
-    res.status(HttpStatus.OK);
+    res.status(HttpStatus.OK).send();
   }
 }
