@@ -2,9 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpStatus,
   Param,
   Post,
+  Query,
   Res,
   UseGuards
 } from '@nestjs/common';
@@ -12,13 +14,21 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { GetCurrentUser } from 'shared/decorators';
 import { User } from 'shared/entities/user.entity';
-import { AddUserExampleDto } from '../../shared/dtos';
+import { AddUserExampleDto, SearchParamsDto } from '../../shared/dtos';
 import { UserExampleService } from '../services/user-example.service';
 
 @Controller('user-examples')
 @UseGuards(AuthGuard())
 export class UserExampleController {
   constructor(private userExampleService: UserExampleService) {}
+
+  @Get()
+  getAllUserExamples(
+    @GetCurrentUser() currentUser: User,
+    @Query() query: SearchParamsDto
+  ) {
+    return this.userExampleService.getAllUserExamples(query, currentUser);
+  }
 
   @Post()
   async addUserExample(

@@ -2,9 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpStatus,
   Param,
   Post,
+  Query,
   Res,
   UseGuards
 } from '@nestjs/common';
@@ -12,13 +14,21 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { GetCurrentUser } from 'shared/decorators';
 import { User } from 'shared/entities/user.entity';
-import { AddUserWordDto } from '../../shared/dtos';
+import { AddUserWordDto, SearchParamsDto } from '../../shared/dtos';
 import { UserWordService } from '../services/user-word.service';
 
 @Controller('user-words')
 @UseGuards(AuthGuard())
 export class UserWordController {
   constructor(private userWordService: UserWordService) {}
+
+  @Get()
+  getAllUserWords(
+    @GetCurrentUser() currentUser: User,
+    @Query() query: SearchParamsDto
+  ) {
+    return this.userWordService.getAllUserWords(query, currentUser);
+  }
 
   @Post()
   async addUserWord(

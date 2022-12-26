@@ -5,7 +5,8 @@ import * as osu from 'node-os-utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   // const { cpu, mem } = osu;
   // let i = 1;

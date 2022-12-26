@@ -20,17 +20,29 @@ export class UserExampleService {
     private globalWordService: GlobalWordService
   ) {}
 
-  async getUserExamples(
-    { page, userMeaningId }: SearchParamsDto,
+  async getAllUserExamples(
+    { page, userMeaningId, language, search }: SearchParamsDto,
     currentUser: User
   ) {
     const query = this.userExampleRepository
       .createQueryBuilder('user_example')
+      .leftJoin('user_example.exampleWord', 'global_word')
+      .addSelect(['global_word.language', 'global_word.text'])
       .where('user_example.user_id = :id', {
         id: currentUser.id
       })
-      .andWhere('user_example.meaning_word_id = :id', {
-        id: userMeaningId
+      .andWhere('user_example.meaning_word_id = :meaningWordId', {
+        meaningWordId: userMeaningId
+      });
+
+    if (language)
+      query.andWhere('global_word.language = :language', {
+        language
+      });
+
+    if (search)
+      query.andWhere(`(LOWER(global_word.text) LIKE LOWER(:search))`, {
+        search: `%${search}%`
       });
 
     const userExamples = await query

@@ -10,7 +10,7 @@ export class SearchParamsDto {
   @Type(() => Number)
   @IsNumber()
   @Min(1)
-  page = 1;
+  page? = 1;
 
   @IsOptional()
   language?: Languages;

@@ -14,7 +14,7 @@ export class UserWordService {
     private globalWordService: GlobalWordService
   ) {}
 
-  async getUserWords(
+  async getAllUserWords(
     { language, page, search }: SearchParamsDto,
     currentUser: User
   ) {
@@ -27,17 +27,17 @@ export class UserWordService {
       });
 
     if (language)
-      query.andWhere('LOWER(global_word.language) = LOWER(:language)', {
+      query.andWhere('global_word.language = :language', {
         language
       });
 
     if (search)
-      query.andWhere(`(LOWER(global_word.text) LIKE LOWER(:search)`, {
+      query.andWhere(`(LOWER(global_word.text) LIKE LOWER(:search))`, {
         search: `%${search}%`
       });
 
     const userWords = await query
-      .offset((page - 1) * 30)
+      .skip((page - 1) * 30)
       .limit(30)
       .getMany();
 

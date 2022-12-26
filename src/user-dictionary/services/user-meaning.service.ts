@@ -20,21 +20,33 @@ export class UserMeaningService {
     private globalWordService: GlobalWordService
   ) {}
 
-  async getUserMeanings(
-    { page, userWordId }: SearchParamsDto,
+  async getAllUserMeanings(
+    { page, userWordId, language, search }: SearchParamsDto,
     currentUser: User
   ) {
     const query = this.userMeaningRepository
       .createQueryBuilder('user_meaning')
+      .leftJoin('user_meaning.toWord', 'global_word')
+      .addSelect(['global_word.language', 'global_word.text'])
       .where('user_meaning.user_id = :id', {
         id: currentUser.id
       })
-      .andWhere('user_meaning.from_word_id = :id', {
-        id: userWordId
+      .andWhere('user_meaning.from_word_id = :fromWordId', {
+        fromWordId: userWordId
+      });
+
+    if (language)
+      query.andWhere('global_word.language = :language', {
+        language
+      });
+
+    if (search)
+      query.andWhere(`(LOWER(global_word.text) LIKE LOWER(:search))`, {
+        search: `%${search}%`
       });
 
     const userMeanings = await query
-      .offset((page - 1) * 30)
+      .skip((page - 1) * 30)
       .limit(30)
       .getMany();
 
