@@ -10,6 +10,7 @@ import { UserExample } from './user-example.entity';
 import { UserMeaning } from './user-meaning.entity';
 import { UserWord } from './user-word.entity';
 import * as bcrypt from 'bcrypt';
+import { UserRoles } from 'shared/enums';
 
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
@@ -23,7 +24,7 @@ export class User extends BaseEntity {
   password: string;
 
   @Column({ default: 2 })
-  role: string;
+  role: UserRoles;
 
   @OneToMany(() => UserWord, (userWord) => userWord.user)
   userWords: UserWord[];

@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'entities/user.entity';
-import { JwtPayload } from '../../shared/interfaces/jwt-payload.interface';
+import { IJwtPayload } from '../../shared/interfaces/jwt-payload.interface';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { SignInDto, SignUpDto } from 'shared/dtos';
@@ -46,7 +46,7 @@ export class AuthService {
     if (!isPasswordTrue)
       throw new UnauthorizedException('check your login credentials');
 
-    const payload: JwtPayload = { username };
+    const payload: IJwtPayload = { username };
     const accessToken: string = this.jwtService.sign(payload);
     return { accessToken, username: user.username, role: user.role };
   }

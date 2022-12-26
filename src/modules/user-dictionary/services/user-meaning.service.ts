@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common';
-import { Repository, In } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserMeaning, UserWord } from 'entities';
-import { AddUserMeaningDto, SearchParamsDto, WordDto } from '../../shared/dtos';
+import { User, UserMeaning } from 'entities';
+import { AddUserMeaningDto, SearchParamsDto } from '../../../shared/dtos';
 import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { UserWordService } from './user-word.service';
 

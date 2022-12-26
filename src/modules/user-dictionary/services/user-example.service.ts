@@ -6,7 +6,7 @@ import {
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserExample } from 'entities';
-import { AddUserExampleDto, SearchParamsDto } from '../../shared/dtos';
+import { AddUserExampleDto, SearchParamsDto } from '../../../shared/dtos';
 import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { UserMeaningService } from './user-meaning.service';
 

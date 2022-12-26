@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { GetCurrentUser } from 'shared/decorators';
 import { User } from 'entities/user.entity';
-import { AddUserMeaningDto, SearchParamsDto } from '../../shared/dtos';
+import { AddUserMeaningDto, SearchParamsDto } from '../../../shared/dtos';
 import { UserMeaningService } from '../services/user-meaning.service';
 
 @Controller('user-meanings')

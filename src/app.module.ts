@@ -13,6 +13,7 @@ import {
   ReportModule,
   UserDictionaryModule
 } from 'modules';
+import { Report } from 'entities';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import {
       username: 'postgres',
       password: 'postgres',
       database: 'dictiour',
-      entities: [User, GlobalWord, UserWord, UserMeaning, UserExample],
+      entities: [User, GlobalWord, UserWord, UserMeaning, UserExample, Report],
       synchronize: true
     }),
     AuthModule,
