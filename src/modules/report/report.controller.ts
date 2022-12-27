@@ -23,8 +23,8 @@ export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Post()
-  addReport(@Query() query: { globalWordId: string }) {
-    return this.reportService.addReport(query);
+  addReport(@Body() body: { globalWordId: string }) {
+    return this.reportService.addReport(body);
   }
 
   @Get()
@@ -34,7 +34,7 @@ export class ReportController {
     return this.reportService.getAllReports(query);
   }
 
-  @Post(':id/evaluate')
+  @Post('/:id/evaluate')
   @UseGuards(RoleGuard)
   @Roles(UserRoles.ADMIN, UserRoles.EDITOR)
   async evaluateReport(

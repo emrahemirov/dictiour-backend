@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -13,8 +14,12 @@ export class Report extends BaseEntity {
   id: string;
 
   @ManyToOne(() => GlobalWord, (word) => word.reports, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    eager: true
   })
   @JoinColumn({ name: 'word_id' })
   word: GlobalWord;
+
+  @Column({ default: 0 })
+  count: number;
 }

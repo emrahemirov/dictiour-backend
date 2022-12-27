@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'entities';
 import { AddUserDto, SearchParamsDto } from 'shared/dtos';
+import { UserRoles } from 'shared/enums';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,7 +17,11 @@ export class UserService {
   ) {}
 
   async getAllUsers({ page }: SearchParamsDto) {
-    const users = this.userRepository.find({ skip: (page - 1) * 30, take: 30 });
+    const users = this.userRepository.find({
+      where: [{ role: UserRoles.EDITOR }, { role: UserRoles.USER }],
+      skip: (page - 1) * 30,
+      take: 30
+    });
 
     return users;
   }

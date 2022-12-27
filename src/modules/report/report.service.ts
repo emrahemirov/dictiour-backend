@@ -20,6 +20,27 @@ export class ReportService {
 
     if (!foundGlobalWord) throw new NotFoundException('not_found');
 
+    const foundReport = await this.reportRepository.findOne({
+      where: { word: { id: globalWordId } }
+    });
+
+    if (foundReport) {
+      const {
+        raw: [updatedReport]
+      } = await this.reportRepository
+        .createQueryBuilder()
+        .update(Report)
+        .set({
+          count: () => 'count + 1'
+        })
+        .where('id = :id', { id: foundReport.id })
+        .returning('*')
+        .updateEntity(true)
+        .execute();
+
+      return updatedReport;
+    }
+
     const insertedReport = await this.reportRepository
       .create({ word: foundGlobalWord })
       .save();
@@ -29,9 +50,9 @@ export class ReportService {
 
   getAllReports({ page }: SearchParamsDto) {
     return this.reportRepository
-      .createQueryBuilder()
+      .createQueryBuilder('report')
       .leftJoin('report.word', 'global_word')
-      .addSelect(['global_word.text', 'global_word.language'])
+      .addSelect(['global_word'])
       .skip((page - 1) * 30)
       .limit(30)
       .getMany();
