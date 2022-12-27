@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GlobalWord, Report } from 'entities';
-import { AddReportDto, SearchParamsDto } from 'shared/dtos';
+import { SearchParamsDto } from 'shared/dtos';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ReportService {
     private readonly globalWordRepository: Repository<GlobalWord>
   ) {}
 
-  async addReport({ globalWordId }: AddReportDto) {
+  async addReport({ globalWordId }: { globalWordId: string }) {
     const foundGlobalWord = await this.globalWordRepository.findOne({
       where: { id: globalWordId }
     });

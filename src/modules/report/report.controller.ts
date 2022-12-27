@@ -12,18 +12,18 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { Roles } from 'shared/decorators/roles.decorator';
-import { AddReportDto, EvaluateReportDto, SearchParamsDto } from 'shared/dtos';
+import { EvaluateReportDto, SearchParamsDto } from 'shared/dtos';
 import { UserRoles } from 'shared/enums';
 import { RoleGuard } from 'shared/guards/role.guard';
 import { ReportService } from './report.service';
 
 @Controller('reports')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard())
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Post()
-  addReport(@Query() query: AddReportDto) {
+  addReport(@Query() query: { globalWordId: string }) {
     return this.reportService.addReport(query);
   }
 

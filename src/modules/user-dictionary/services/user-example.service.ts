@@ -6,7 +6,10 @@ import {
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserExample } from 'entities';
-import { AddUserExampleDto, SearchParamsDto } from '../../../shared/dtos';
+import {
+  AddUserExampleDto,
+  DictionarySearchParams
+} from '../../../shared/dtos';
 import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { UserMeaningService } from './user-meaning.service';
 
@@ -21,7 +24,7 @@ export class UserExampleService {
   ) {}
 
   async getAllUserExamples(
-    { page, userMeaningId, language, search }: SearchParamsDto,
+    { page, userMeaningId, language, search }: DictionarySearchParams,
     currentUser: User
   ) {
     const query = this.userExampleRepository

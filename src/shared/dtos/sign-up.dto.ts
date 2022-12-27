@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Match } from 'shared/decorators';
+import { UserRoles } from 'shared/enums';
 
-export class SignUpDto {
+export class AddUserDto {
   @IsNotEmpty()
   @IsString()
   username: string;
@@ -9,6 +10,9 @@ export class SignUpDto {
   @IsNotEmpty()
   @IsString()
   password: string;
+
+  @IsOptional()
+  role: UserRoles;
 
   @IsNotEmpty()
   @IsString()

@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { GetCurrentUser } from 'shared/decorators';
 import { User } from 'entities/user.entity';
-import { AddUserWordDto, SearchParamsDto } from '../../../shared/dtos';
+import { AddUserWordDto, DictionarySearchParams } from '../../../shared/dtos';
 import { UserWordService } from '../services/user-word.service';
 
 @Controller('user-words')
@@ -25,7 +25,7 @@ export class UserWordController {
   @Get()
   getAllUserWords(
     @GetCurrentUser() currentUser: User,
-    @Query() query: SearchParamsDto
+    @Query() query: DictionarySearchParams
   ) {
     return this.userWordService.getAllUserWords(query, currentUser);
   }

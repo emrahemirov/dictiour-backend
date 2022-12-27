@@ -14,7 +14,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { GetCurrentUser } from 'shared/decorators';
 import { User } from 'entities/user.entity';
-import { AddUserExampleDto, SearchParamsDto } from '../../../shared/dtos';
+import {
+  AddUserExampleDto,
+  DictionarySearchParams
+} from '../../../shared/dtos';
 import { UserExampleService } from '../services/user-example.service';
 
 @Controller('user-examples')
@@ -25,7 +28,7 @@ export class UserExampleController {
   @Get()
   getAllUserExamples(
     @GetCurrentUser() currentUser: User,
-    @Query() query: SearchParamsDto
+    @Query() query: DictionarySearchParams
   ) {
     return this.userExampleService.getAllUserExamples(query, currentUser);
   }

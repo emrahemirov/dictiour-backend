@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserWord } from 'entities';
-import { AddUserWordDto, SearchParamsDto } from '../../../shared/dtos';
+import { AddUserWordDto, DictionarySearchParams } from '../../../shared/dtos';
 import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { BadRequestException } from '@nestjs/common/exceptions';
 
@@ -15,7 +15,7 @@ export class UserWordService {
   ) {}
 
   async getAllUserWords(
-    { language, page, search }: SearchParamsDto,
+    { language, page, search }: DictionarySearchParams,
     currentUser: User
   ) {
     const query = this.userWordRepository

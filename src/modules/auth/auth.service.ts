@@ -10,7 +10,7 @@ import { User } from 'entities/user.entity';
 import { IJwtPayload } from '../../shared/interfaces/jwt-payload.interface';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
-import { SignInDto, SignUpDto } from 'shared/dtos';
+import { SignInDto, AddUserDto } from 'shared/dtos';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async signUp({ username, password }: SignUpDto): Promise<User> {
+  async signUp({ username, password }: AddUserDto): Promise<User> {
     const user = this.userRepository.create({ username, password });
 
     try {

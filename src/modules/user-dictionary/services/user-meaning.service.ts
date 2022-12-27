@@ -6,7 +6,7 @@ import {
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserMeaning } from 'entities';
-import { AddUserMeaningDto, SearchParamsDto } from '../../../shared/dtos';
+import { AddUserMeaningDto, DictionarySearchParams } from '../../../shared/dtos';
 import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { UserWordService } from './user-word.service';
 
@@ -21,7 +21,7 @@ export class UserMeaningService {
   ) {}
 
   async getAllUserMeanings(
-    { page, userWordId, language, search }: SearchParamsDto,
+    { page, userWordId, language, search }: DictionarySearchParams,
     currentUser: User
   ) {
     const query = this.userMeaningRepository
