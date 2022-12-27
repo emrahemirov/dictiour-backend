@@ -6,6 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
+import { Report } from './report.entity';
 import { UserExample } from './user-example.entity';
 import { UserMeaning } from './user-meaning.entity';
 import { UserWord } from './user-word.entity';
@@ -38,4 +39,7 @@ export class GlobalWord extends BaseEntity {
 
   @OneToMany(() => UserExample, (userExample) => userExample.exampleWord)
   examples: UserExample[];
+
+  @OneToMany(() => Report, (report) => report.word)
+  reports: Report[];
 }

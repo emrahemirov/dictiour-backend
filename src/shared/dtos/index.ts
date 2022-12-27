@@ -6,3 +6,4 @@ export { SignInDto } from './sign-in.dto';
 export { SignUpDto } from './sign-up.dto';
 export { SearchParamsDto } from './search-params.dto';
 export { EvaluateReportDto } from './evaluate-report.dto';
+export { AddReportDto } from './add-report.dto';

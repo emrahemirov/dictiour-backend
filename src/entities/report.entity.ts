@@ -12,7 +12,7 @@ export class Report extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => GlobalWord, (word) => word.userWords, {
+  @ManyToOne(() => GlobalWord, (word) => word.reports, {
     onDelete: 'CASCADE'
   })
   @JoinColumn({ name: 'word_id' })
