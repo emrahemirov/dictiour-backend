@@ -27,7 +27,7 @@ export class UserMeaningService {
     const query = this.userMeaningRepository
       .createQueryBuilder('user_meaning')
       .leftJoin('user_meaning.toWord', 'global_word')
-      .addSelect(['global_word.language', 'global_word.text'])
+      .addSelect(['global_word',])
       .where('user_meaning.user_id = :id', {
         id: currentUser.id
       })

@@ -30,7 +30,7 @@ export class UserExampleService {
     const query = this.userExampleRepository
       .createQueryBuilder('user_example')
       .leftJoin('user_example.exampleWord', 'global_word')
-      .addSelect(['global_word.language', 'global_word.text'])
+      .addSelect(['global_word'])
       .where('user_example.user_id = :id', {
         id: currentUser.id
       })

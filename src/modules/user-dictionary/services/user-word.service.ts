@@ -21,7 +21,7 @@ export class UserWordService {
     const query = this.userWordRepository
       .createQueryBuilder('user_word')
       .leftJoin('user_word.word', 'global_word')
-      .addSelect(['global_word.language', 'global_word.text'])
+      .addSelect(['global_word'])
       .where('user_word.user_id = :id', {
         id: currentUser.id
       });
