@@ -6,7 +6,10 @@ import {
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserMeaning } from 'entities';
-import { AddUserMeaningDto, DictionarySearchParams } from '../../../shared/dtos';
+import {
+  AddUserMeaningDto,
+  DictionarySearchParams
+} from '../../../shared/dtos';
 import { GlobalWordService } from 'modules/global-word/global-word.service';
 import { UserWordService } from './user-word.service';
 
@@ -27,7 +30,7 @@ export class UserMeaningService {
     const query = this.userMeaningRepository
       .createQueryBuilder('user_meaning')
       .leftJoin('user_meaning.toWord', 'global_word')
-      .addSelect(['global_word',])
+      .addSelect(['global_word'])
       .where('user_meaning.user_id = :id', {
         id: currentUser.id
       })
@@ -47,7 +50,7 @@ export class UserMeaningService {
 
     const userMeanings = await query
       .skip((page - 1) * 30)
-      .limit(30)
+      .take(30)
       .getMany();
 
     return userMeanings;

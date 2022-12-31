@@ -16,7 +16,7 @@ export class UserWord extends BaseEntity {
   id: string;
 
   @ManyToOne(() => User, (user) => user.userWords, {
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
   })
   @JoinColumn({ name: 'user_id' })
   user: User;

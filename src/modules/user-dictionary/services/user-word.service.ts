@@ -38,7 +38,7 @@ export class UserWordService {
 
     const userWords = await query
       .skip((page - 1) * 30)
-      .limit(30)
+      .take(30)
       .getMany();
 
     return userWords;

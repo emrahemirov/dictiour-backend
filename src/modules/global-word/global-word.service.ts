@@ -26,7 +26,7 @@ export class GlobalWordService {
 
     const words = await query
       .skip((page - 1) * 30)
-      .limit(30)
+      .take(30)
       .getMany();
 
     return words;

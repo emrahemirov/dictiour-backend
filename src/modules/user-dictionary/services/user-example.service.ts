@@ -49,8 +49,8 @@ export class UserExampleService {
       });
 
     const userExamples = await query
-      .offset((page - 1) * 30)
-      .limit(30)
+      .skip((page - 1) * 30)
+      .take(30)
       .getMany();
 
     return userExamples;

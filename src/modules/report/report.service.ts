@@ -54,7 +54,7 @@ export class ReportService {
       .leftJoin('report.word', 'global_word')
       .addSelect(['global_word'])
       .skip((page - 1) * 30)
-      .limit(30)
+      .take(30)
       .getMany();
   }
 
