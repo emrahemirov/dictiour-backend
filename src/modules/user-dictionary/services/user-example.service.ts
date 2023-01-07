@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserExample } from 'entities';
+import { User, UserExample, UserMeaning } from 'entities';
 import {
   AddUserExampleDto,
   DictionarySearchParams
@@ -57,7 +57,7 @@ export class UserExampleService {
   }
 
   async getOrCreateUserExample(
-    { example, fromWord, toWord }: AddUserExampleDto,
+    { meaningId, example, fromWord, toWord }: AddUserExampleDto,
     currentUser: User
   ) {
     if (
@@ -66,8 +66,13 @@ export class UserExampleService {
     )
       throw new BadRequestException('example_words_are_same');
 
-    const userMeaningWord =
-      await this.userMeaningService.getOrCreateUserMeaning(
+    let userMeaningWord: UserMeaning = null;
+    if (meaningId)
+      userMeaningWord = await this.userMeaningService.getUserMeaningWithId(
+        meaningId
+      );
+    else
+      userMeaningWord = await this.userMeaningService.getOrCreateUserMeaning(
         { fromWord, toWord },
         currentUser
       );

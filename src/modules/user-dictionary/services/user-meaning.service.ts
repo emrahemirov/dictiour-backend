@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserMeaning } from 'entities';
+import { User, UserMeaning, UserWord } from 'entities';
 import {
   AddUserMeaningDto,
   DictionarySearchParams
@@ -56,17 +56,29 @@ export class UserMeaningService {
     return userMeanings;
   }
 
+  async getUserMeaningWithId(id: string) {
+    const foundUserMeaning = await this.userMeaningRepository.findOne({
+      where: { id }
+    });
+    return foundUserMeaning;
+  }
+
   async getOrCreateUserMeaning(
-    { fromWord, toWord }: AddUserMeaningDto,
+    { fromWordId, fromWord, toWord }: AddUserMeaningDto,
     currentUser: User
   ) {
     if (fromWord.text === toWord.text && fromWord.language === toWord.language)
       throw new BadRequestException('meaning_words_are_same');
 
-    const userWord = await this.userWordService.getOrCreateUserWord(
-      { word: fromWord },
-      currentUser
-    );
+    let userWord: UserWord = null;
+    if (fromWordId)
+      userWord = await this.userWordService.getUserWordWithId(fromWordId);
+    else
+      userWord = await this.userWordService.getOrCreateUserWord(
+        { word: fromWord },
+        currentUser
+      );
+
     const globalToWord = await this.globalWordService.getOrCreate(toWord);
 
     const foundUserMeaning = await this.userMeaningRepository.findOne({

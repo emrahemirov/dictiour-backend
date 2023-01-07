@@ -31,7 +31,7 @@ export class UserService {
 
     try {
       return await this.userRepository.save(user);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === '23505') {
         throw new ConflictException('user_already_exists');
       } else {

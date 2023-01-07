@@ -25,7 +25,7 @@ export class AuthService {
 
     try {
       return await this.userRepository.save(user);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === '23505') {
         throw new ConflictException(
           'user with this account address already exists'
