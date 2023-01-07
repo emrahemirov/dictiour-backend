@@ -18,7 +18,7 @@ export class UserService {
 
   async getAllUsers({ page }: SearchParamsDto) {
     const users = this.userRepository.find({
-      where: [{ role: UserRoles.EDITOR }, { role: UserRoles.USER }],
+      where: [{ role: UserRoles.USER }],
       skip: (page - 1) * 30,
       take: 30
     });

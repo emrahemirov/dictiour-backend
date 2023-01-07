@@ -23,7 +23,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({ default: 2 })
+  @Column({ default: UserRoles.USER })
   role: UserRoles;
 
   @OneToMany(() => UserWord, (userWord) => userWord.user)

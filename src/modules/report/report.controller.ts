@@ -29,14 +29,14 @@ export class ReportController {
 
   @Get()
   @UseGuards(RoleGuard)
-  @Roles(UserRoles.ADMIN, UserRoles.EDITOR)
+  @Roles(UserRoles.ADMIN)
   getAllReports(@Query() query: SearchParamsDto) {
     return this.reportService.getAllReports(query);
   }
 
   @Post('/:id/evaluate')
   @UseGuards(RoleGuard)
-  @Roles(UserRoles.ADMIN, UserRoles.EDITOR)
+  @Roles(UserRoles.ADMIN)
   async evaluateReport(
     @Param() { id }: { id: string },
     @Body() { isApproved }: EvaluateReportDto,
