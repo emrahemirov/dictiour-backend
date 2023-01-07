@@ -48,10 +48,11 @@ export class UserWordService {
     const foundUserWord = await this.userWordRepository.findOne({
       where: { id }
     });
+
     return foundUserWord;
   }
 
-  async getOrCreateUserWord({ word }: AddUserWordDto, currentUser: User) {
+  async createUserWord({ word }: AddUserWordDto, currentUser: User) {
     const globalWord = await this.globalWordService.getOrCreate(word);
 
     const foundUserWord = await this.userWordRepository.findOne({

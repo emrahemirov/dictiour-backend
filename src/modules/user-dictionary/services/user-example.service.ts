@@ -56,26 +56,26 @@ export class UserExampleService {
     return userExamples;
   }
 
-  async getOrCreateUserExample(
-    { meaningId, example, fromWord, toWord }: AddUserExampleDto,
+  async createUserExample(
+    { meaningId, example }: AddUserExampleDto,
     currentUser: User
   ) {
+    const userMeaningWord = await this.userMeaningService.getUserMeaningWithId(
+      meaningId
+    );
+
     if (
-      [fromWord.text, toWord.text].includes(example.text) &&
-      [fromWord.language, toWord.language].includes(example.language)
+      [
+        userMeaningWord.toWord.text,
+        userMeaningWord.fromWord.word.text
+      ].includes(example.text) &&
+      [
+        userMeaningWord.toWord.language,
+        userMeaningWord.fromWord.word.language
+      ].includes(example.language)
     )
       throw new BadRequestException('example_words_are_same');
 
-    let userMeaningWord: UserMeaning = null;
-    if (meaningId)
-      userMeaningWord = await this.userMeaningService.getUserMeaningWithId(
-        meaningId
-      );
-    else
-      userMeaningWord = await this.userMeaningService.getOrCreateUserMeaning(
-        { fromWord, toWord },
-        currentUser
-      );
     const globalExampleWord = await this.globalWordService.getOrCreate(example);
 
     const foundUserExample = await this.userExampleRepository.findOne({

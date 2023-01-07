@@ -24,7 +24,8 @@ export class UserMeaning extends BaseEntity {
   user: User;
 
   @ManyToOne(() => UserWord, (userWord) => userWord.meaningFromWords, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    eager: true
   })
   @JoinColumn({ name: 'from_word_id' })
   fromWord: UserWord;

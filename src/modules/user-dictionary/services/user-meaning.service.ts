@@ -60,24 +60,23 @@ export class UserMeaningService {
     const foundUserMeaning = await this.userMeaningRepository.findOne({
       where: { id }
     });
+
     return foundUserMeaning;
   }
 
-  async getOrCreateUserMeaning(
-    { fromWordId, fromWord, toWord }: AddUserMeaningDto,
+  async createUserMeaning(
+    { fromWordId, toWord }: AddUserMeaningDto,
     currentUser: User
   ) {
-    if (fromWord.text === toWord.text && fromWord.language === toWord.language)
-      throw new BadRequestException('meaning_words_are_same');
+    const userWord: UserWord = await this.userWordService.getUserWordWithId(
+      fromWordId
+    );
 
-    let userWord: UserWord = null;
-    if (fromWordId)
-      userWord = await this.userWordService.getUserWordWithId(fromWordId);
-    else
-      userWord = await this.userWordService.getOrCreateUserWord(
-        { word: fromWord },
-        currentUser
-      );
+    if (
+      userWord.word.text === toWord.text &&
+      userWord.word.language === toWord.language
+    )
+      throw new BadRequestException('meaning_words_are_same');
 
     const globalToWord = await this.globalWordService.getOrCreate(toWord);
 

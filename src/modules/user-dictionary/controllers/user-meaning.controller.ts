@@ -38,7 +38,7 @@ export class UserMeaningController {
     @GetCurrentUser() currentUser: User,
     @Body() body: AddUserMeaningDto
   ) {
-    return this.userMeaningService.getOrCreateUserMeaning(body, currentUser);
+    return this.userMeaningService.createUserMeaning(body, currentUser);
   }
 
   @Delete('/:id')

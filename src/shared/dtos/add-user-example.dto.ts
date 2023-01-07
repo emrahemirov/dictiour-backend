@@ -9,23 +9,8 @@ import {
 import { WordDto } from '.';
 
 export class AddUserExampleDto {
-  @IsOptional()
   @IsString()
-  meaningId?: string;
-
-  @IsOptional()
-  @IsObject()
-  @IsNotEmptyObject()
-  @ValidateNested()
-  @Type(() => WordDto)
-  fromWord?: WordDto;
-
-  @IsOptional()
-  @IsObject()
-  @IsNotEmptyObject()
-  @ValidateNested()
-  @Type(() => WordDto)
-  toWord: WordDto;
+  meaningId: string;
 
   @IsObject()
   @IsNotEmptyObject()

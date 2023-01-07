@@ -9,16 +9,8 @@ import {
 import { WordDto } from '.';
 
 export class AddUserMeaningDto {
-  @IsOptional()
   @IsString()
-  fromWordId?: string;
-
-  @IsOptional()
-  @IsObject()
-  @IsNotEmptyObject()
-  @ValidateNested()
-  @Type(() => WordDto)
-  fromWord?: WordDto;
+  fromWordId: string;
 
   @IsObject()
   @IsNotEmptyObject()

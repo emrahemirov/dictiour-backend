@@ -22,7 +22,8 @@ export class UserWord extends BaseEntity {
   user: User;
 
   @ManyToOne(() => GlobalWord, (word) => word.userWords, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    eager: true
   })
   @JoinColumn({ name: 'word_id' })
   word: GlobalWord;

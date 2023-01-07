@@ -35,7 +35,7 @@ export class UserWordController {
     @GetCurrentUser() currentUser: User,
     @Body() body: AddUserWordDto
   ) {
-    return this.userWordService.getOrCreateUserWord(body, currentUser);
+    return this.userWordService.createUserWord(body, currentUser);
   }
 
   @Delete('/:id')

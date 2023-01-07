@@ -38,7 +38,7 @@ export class UserExampleController {
     @GetCurrentUser() currentUser: User,
     @Body() body: AddUserExampleDto
   ) {
-    return this.userExampleService.getOrCreateUserExample(body, currentUser);
+    return this.userExampleService.createUserExample(body, currentUser);
   }
 
   @Delete('/:id')
